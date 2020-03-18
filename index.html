@@ -16,7 +16,7 @@ var myGamePiece;
 
 function startGame() {
     myGameArea.start();
-    myGamePiece = new component(30, 30, "DodgerBlue", 10, 120);
+    myGamePiece = new component(30, 30, "DodgerBlue", 10, 700);
 }
 
 var myGameArea = {
@@ -48,29 +48,67 @@ function component(width, height, color, x, y) {
     this.speedY = 0;    
     this.x = x;
     this.y = y;    
+    this.gravity = .9;
+    this.gravitySpeed = 0;
+    this.jump = false;
+    this.goUp = false;
+    this.jumpHeight = 150
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
+
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravity = .9;
+            this.gravitySpeed = 0;
+            this.speedY = 0;
+        }
+    }
+
     this.newPos = function() {
+        document.getElementById("output").innerHTML = "y: "+  this.y + "<br>" + "x: "+  this.x + "<br>" + "jump: "+  this.jump + "<br>"  + "goUp: "+  this.goUp + "<br>" ;
+        
         this.x += this.speedX;
-        this.y += this.speedY;        
-    }    
+        
+        if(this.jump) {
+            if(this.goUp) {
+                this.y += -10;
+                if(this.y < myGameArea.canvas.height - this.height - this.jumpHeight)
+                    this.goUp = false;
+            }
+            // go down
+            if(!this.goUp) {
+                this.gravitySpeed += this.gravity;
+                this.y += this.speedY + this.gravitySpeed;
+                if(this.y >= myGameArea.canvas.height - this.height) {
+                    this.jump = false;
+                }
+            }
+        } else {
+            this.gravitySpeed += this.gravity;
+            this.y += this.speedY + this.gravitySpeed;
+        }        
+        this.hitBottom();
+    }
+    
 }
+
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;    
-    if (myGameArea.keys && myGameArea.keys[65]) {myGamePiece.speedX = -25; }
-    if (myGameArea.keys && myGameArea.keys[68]) {myGamePiece.speedX = 25; }
-    if (myGameArea.keys && myGameArea.keys[87]) {myGamePiece.speedY = -25; }
-    if (myGameArea.keys && myGameArea.keys[83]) {myGamePiece.speedY = 25; }
+    if (myGameArea.keys && myGameArea.keys[65]) {myGamePiece.speedX = -10; }
+    if (myGameArea.keys && myGameArea.keys[68]) {myGamePiece.speedX = 10; }
+    if (myGameArea.keys && myGameArea.keys[87] && !myGamePiece.jump) {myGamePiece.speedY = -20; myGamePiece.jump = true; myGamePiece.goUp = true;} // myGamePiece.speedY = -18;  Jump up "W"
+    if (myGameArea.keys && myGameArea.keys[83]) {myGamePiece.speedY = 10; } // Fall faster
     myGamePiece.newPos();    
     myGamePiece.update();
 }
 </script>
-<p>Make sure this window has focus, then use the wasd on you keyboard to move the red square.</p>
-<p>When pressing both the left and the down arrow, the red square will move both down and to the left.</p>
+<p id="output"></p>
 </body>
 </html>
