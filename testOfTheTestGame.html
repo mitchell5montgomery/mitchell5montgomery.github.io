@@ -13,27 +13,28 @@ canvas {
 <script>
 
 var myGamePiece;
-var myObstacle;
-var obstacleTop2;
 var myGamePiece2;
-var obstacleBottom2;
-var obstacle3;
-var obstacleTop4;
-var obstacleBottom4;
-var obstacle5;
+var finishline;
+var obstacleVector = [];
+//var obstacle5;
 
 function startGame() {
     myGameArea.start();
     myGamePiece = new component(30, 30, "red", 10, 130);
     myGamePiece2 = new component(30, 30, "purple", 10, 90);
-    myObstacle = new component(10, 200, "white", 300, 120);
-    obstacleTop2 = new component(10, 200, "white",500, 160);
-    obstacleBottom2 = new component(10, 100, "white",500, 0);
-    obstacle3 = new component(10, 200, "white",700, 0);
-    obstacleTop4 = new component(10, 90, "white", 900, 0);
-    obstacleBottom4 = new component(10, 130, "white", 900, 190);
-    //obstacl5 = new component(10, 200, "white", 1200, 0);
-    
+    finishline = new component(10, 300, "hotPink", 1850, 0);
+
+    obstacleVector.push(new component(10, 200, "white", 300, 120));
+    obstacleVector.push(new component(10, 200, "white",500, 160));
+    obstacleVector.push(new component(10, 100, "white",500, 0));
+    obstacleVector.push(new component(10, 200, "white",700, 0));
+    obstacleVector.push(new component(10, 90, "white", 900, 0));
+    obstacleVector.push(new component(10, 130, "white", 900, 190));
+    obstacleVector.push(new component(10, 130, "white", 900, 190));
+    obstacleVector.push(new component(10, 200, "white", 1200, 0));   
+    obstacleVector.push(new component(10, 200, "white", 1400, 110));
+    obstacleVector.push(new component(10, 180, "white", 1650, 180));
+    obstacleVector.push(new component(10, 100, "white", 1650, 0));
 }
 
 var myGameArea = {
@@ -43,7 +44,7 @@ var myGameArea = {
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setInterval(updateGameAreaCheck, 20);
+        this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
             myGameArea.keys = (myGameArea.keys || []);
             myGameArea.keys[e.keyCode] = (e.type == "keydown");
@@ -114,12 +115,21 @@ function component(width, height, color, x, y) {
 
 function updateGameArea() {
     myGameArea.clear();
-    myObstacle.update();
-    obstacleTop2.update();
-    obstacleBottom2.update();
-    obstacle3.update();
-    obstacleTop4.update();
-    obstacleBottom4.update();
+    
+    for (i = 0; i < obstacleVector.length; ++i) {
+        obstacleVector[i].update();
+        if(myGamePiece.crashWith(obstacleVector[i])){
+                myGamePiece.x = 10;
+                myGamePiece.y = 130;
+            }
+        else if(myGamePiece2.crashWith(obstacleVector[i])){
+              myGamePiece2.x = 10;
+              myGamePiece2.y = 90;
+        }
+
+
+    }
+
     //obstacle5.update();
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;   
@@ -140,6 +150,7 @@ function updateGameArea() {
     myGamePiece.update();
     myGamePiece2.newPos();    
     myGamePiece2.update();
+    finishline.update();
 
     }
 
@@ -151,28 +162,29 @@ function updateGameArea() {
 
         }
     }*/
-
+/*
     function updateGameAreaCheck(){
-        if (myGamePiece.crashWith(myObstacle) || myGamePiece.crashWith(obstacleTop2) || myGamePiece.crashWith(obstacleBottom2) || myGamePiece.crashWith(obstacle3) ||
-            myGamePiece.crashWith(obstacleBottom4) || myGamePiece.crashWith(obstacleTop4))
-        {
-            myGamePiece.x = 10;
-            myGamePiece.y = 130;
-            updateGameArea();
-        }
-        else if (myGamePiece2.crashWith(myObstacle) || myGamePiece2.crashWith(obstacleTop2) || myGamePiece2.crashWith(obstacleBottom2) || myGamePiece2.crashWith(obstacle3) ||
-        myGamePiece2.crashWith(obstacleBottom4) || myGamePiece2.crashWith(obstacleTop4))
-        {
-            myGamePiece2.x = 10;
-            myGamePiece2.y = 90;
-            updateGameArea();
-        }
-        else 
-        {
-            updateGameArea();
+        for(i = 0; i < obstacleVector.length; ++i){
+           
+            if(myGamePiece.crashWith(obstacleVector[i])){
+                updateGameArea();
+                myGamePiece.x = 10;
+                myGamePiece.y = 130;
+            }
+
+            else if(myGamePiece2.crashWith(obstacleVector[i])){
+                updateGameArea();
+                myGamePiece2.x = 10;
+                myGamePiece2.y = 90;
+            }
+            
+            else{
+                updateGameArea();
+            }
         }
     }
+*/
 </script>
-<p>Mitchell is the best. Everyone else is</p>
+<p>Mitchell is the best. Everyone else is slower.</p>
 </body>
 </html>
