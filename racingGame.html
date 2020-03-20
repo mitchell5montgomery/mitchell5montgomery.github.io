@@ -7,8 +7,66 @@ canvas {
     border:4px solid #000000;
     background-color: #585858;
 }
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #ffffff;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 10%;
+}
+
+/* The Close Button */
+.close {
+  color: #000000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 </style>
 </head>
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Red Wins!</p>
+    </div>
+  
+  </div>
+  <div id="myModal2" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Blue Wins!</p>
+    </div>
+  
+  </div>
 <body onload="startGame()">
 <script>
 
@@ -16,6 +74,10 @@ var myGamePiece;
 var myGamePiece2;
 var finishLine;
 var obstacleVector = [];
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+
+
 
 function startGame() {
     myGameArea.start();
@@ -53,7 +115,7 @@ function startGame() {
         obstacleVector.push(new component(10, 300 - height - gap, "white", x, height + gap));
     }
 
-
+    
 
 }
 
@@ -172,20 +234,24 @@ function updateGameArea() {
     myGamePiece2.update();
     finishLine.update();
 
-    if(myGamePiece.crashWith(finishLine) || myGamePiece2.crashWith(finishLine)){
+    if(myGamePiece.crashWith(finishLine)){
         myGameArea.stop();
+        myModal.style.display = "block";
+        span.onclick = function() {
+             myModal.style.display = "none";
+        }
     }
 
+    if(myGamePiece2.crashWith(finishLine)){
+        myGameArea.stop();
+        myModal2.style.display = "block";
+        span.onclick = function() {
+             myModal2.style.display = "none";
+        }
     }
 
-   /* function win (){
-        if (myGamePiece.x > 1900){
+}
 
-        }
-        if (myGamePiece2.x > 1900){
-
-        }
-    }*/
 </script>
 <p>Mitchell is the best. Everyone else is slower.</p>
 </body>
