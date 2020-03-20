@@ -16,7 +16,6 @@ var myGamePiece;
 var myGamePiece2;
 var finishLine;
 var obstacleVector = [];
-//var obstacle5;
 
 function startGame() {
     myGameArea.start();
@@ -24,17 +23,38 @@ function startGame() {
     myGamePiece2 = new component(30, 30, "blue", 10, 90);
     finishLine = new component(10, myGameArea.canvas.height, "hotPink", 1850, 0);
 
-    obstacleVector.push(new component(10, 200, "white", 300, 120));
-    obstacleVector.push(new component(10, 200, "white",500, 160));
-    obstacleVector.push(new component(10, 100, "white",500, 0));
-    obstacleVector.push(new component(10, 200, "white",700, 0));
-    obstacleVector.push(new component(10, 90, "white", 900, 0));
-    obstacleVector.push(new component(10, 130, "white", 900, 190));
-    obstacleVector.push(new component(10, 130, "white", 900, 190));
-    obstacleVector.push(new component(10, 200, "white", 1200, 0));   
-    obstacleVector.push(new component(10, 200, "white", 1400, 110));
-    obstacleVector.push(new component(10, 180, "white", 1650, 180));
-    obstacleVector.push(new component(10, 100, "white", 1650, 0));
+    /*var x, height, minHeight, maxHeight, minGap, maxGap, x_random;
+    for(i = 0; i < 6; i++){
+        minHeight = 50;
+        maxHeight = 200;
+        minGap = 200;
+        maxGap = 300;
+        //x_random = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        x = 300 * i + 150;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+
+        obstacleVector.push(new component(10, height, "white", x, 0));
+
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        
+        obstacleVector.push(new component(10, 300 - height, "white", x + 150, height + 50));
+    }*/
+
+    var x, height, minHeight, maxHeight, minGap, maxGap, gap;
+    for(i = 0; i < 11; i++){
+        x = 150 * i + 150;;
+        minHeight = 20;
+        maxHeight = 200;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        minGap = 50;
+        maxGap = 200;
+        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        obstacleVector.push(new component(10, height, "white", x, 0));
+        obstacleVector.push(new component(10, 300 - height - gap, "white", x, height + gap));
+    }
+
+
+
 }
 
 var myGameArea = {
@@ -131,7 +151,6 @@ function updateGameArea() {
         }
     }
 
-    //obstacle5.update();
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;   
     myGamePiece2.speedX = 0;
@@ -167,28 +186,6 @@ function updateGameArea() {
 
         }
     }*/
-/*
-    function updateGameAreaCheck(){
-        for(i = 0; i < obstacleVector.length; ++i){
-           
-            if(myGamePiece.crashWith(obstacleVector[i])){
-                updateGameArea();
-                myGamePiece.x = 10;
-                myGamePiece.y = 130;
-            }
-
-            else if(myGamePiece2.crashWith(obstacleVector[i])){
-                updateGameArea();
-                myGamePiece2.x = 10;
-                myGamePiece2.y = 90;
-            }
-            
-            else{
-                updateGameArea();
-            }
-        }
-    }
-*/
 </script>
 <p>Mitchell is the best. Everyone else is slower.</p>
 </body>
